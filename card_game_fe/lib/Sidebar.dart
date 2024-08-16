@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget{
-  const Sidebar({Key key})  :  super(key: key)
+  const Sidebar({super.key}); 
   
   @override
   Widget build(BuildContext context) {
@@ -21,3 +21,5 @@ class Sidebar extends StatelessWidget{
       ))
   }
 }
+
+
