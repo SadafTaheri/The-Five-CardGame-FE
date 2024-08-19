@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'Sidebar.dart';
 
 class Home extends StatelessWidget{
-  const Home({Key key})  :  super(key: key)
+  const Home({super.key});
   
   @override
   Widget build(BuildContext context) {
-    return Container(child: child)
+    return Container(child: const SideNavBar());
+    
   }
 }
 

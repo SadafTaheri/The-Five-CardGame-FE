@@ -1,25 +1,57 @@
 import 'package:flutter/material.dart';
 
-class Sidebar extends StatelessWidget{
-  const Sidebar({super.key}); 
-  
+class SideNavBar extends StatelessWidget {
+  const SideNavBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container( 
+    return Container(
       width: 250,
-      height: double.infinity,
-      color: Colors.orange[300],
+      color: const Color.fromARGB(255, 70, 52, 81),
       child: Column(
-        children: <Widget>[ 
-          SizedBox(height: 20 ),
-          ListTile( 
-            leading: Icon(Icons.Home, color: Colors.amber[50],),
-          )
-
-          
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('lib/assets/hut.png')),
+            title: const Text('Home', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              //Navigate to Home
+            },
+          ),
+          ListTile(
+            leading: Image.asset('lib/assets/swords.png'),
+            title: const Text('Battle', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navigate to PlayPage
+            },
+          ),
+          ListTile(
+            leading: Image.asset('lib/assets/playing-cards.png'),
+            title:
+                const Text('Collection', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navigate to Collection
+            },
+          ),
+          ListTile(
+            leading: Image.asset('lib/assets/treasure.png'),
+            title: const Text('Shop', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navigate to Shop
+            },
+          ),
+          ListTile(
+            leading: Image.asset('lib/assets/down.png'),
+            title: const Text('More', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navigate to More
+            },
+          ),
         ],
-      ))
+      ),
+    );
   }
 }
-
-
