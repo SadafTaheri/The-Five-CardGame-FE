@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
 import 'Sidebar.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(
-      children: [
-        Container(
-          child: Sidebar(),
-        ),
-        Expanded(
-            child: Center(
-          child: const Text('Home'),
-        ))
-      ],
-    ));
+      body: Row(
+        children: [
+          const Sidebar(),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    "lib/assets/background.png",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Center(child: Image.asset("lib/assets/title.png")),
+                Container(
+                  margin: const EdgeInsets.only(top: 20.0),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
+
 /*
 body: Row(
 children: [
