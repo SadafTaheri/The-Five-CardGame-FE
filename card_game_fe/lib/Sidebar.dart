@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class SideNavBar extends StatelessWidget {
-  const SideNavBar({Key? key}) : super(key: key);
+class Sidebar extends StatelessWidget {
+  const Sidebar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 180,
       color: const Color.fromARGB(255, 70, 52, 81),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
+          // Expanded()
+
           ListTile(
-            leading: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('lib/assets/hut.png')),
+            leading: SizedBox(child: Image.asset('lib/assets/hut.png')),
             title: const Text('Home', style: TextStyle(color: Colors.white)),
             onTap: () {
               //Navigate to Home
