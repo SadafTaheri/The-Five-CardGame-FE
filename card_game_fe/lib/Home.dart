@@ -1,35 +1,47 @@
 import 'package:flutter/material.dart';
 import 'Sidebar.dart';
-import 'dart:ui';
+import 'Battle.dart';
+import 'Collection.dart';
+import 'Shop.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    HomePageContent(),
+    Battle(),
+    Collection(),
+    Shop(),
+
+    //
+  ];
+
+  void _onItemSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          const Sidebar(),
+          Sidebar(
+            onItemSelected: _onItemSelected,
+            selectedIndex: _selectedIndex,
+          ),
           Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    "lib/assets/background.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                    bottom: 0,
-                    left: 0,
-                    width: 700,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.1),
-                        ),
-                        child: Image.asset("lib/assets/title2.png")))
-              ],
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: _pages,
             ),
           ),
         ],
@@ -38,24 +50,29 @@ class HomePage extends StatelessWidget {
   }
 }
 
-/*
-body: Row(
-children: [
-Container(
-width: 250.0,
-color: Colors.grey[200],
-child: Sidebar(),),
-Expanded(
-child: Center(
-child: const Text ('Home page')
-)
-*/
-
-
-/*
-drawer: Sidebar(),
-      body: const Center(
-        child: Text("HomePage"),
-      ),
-
-*/
+class HomePageContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            "lib/assets/background.png",
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          width: 700,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.1),
+            ),
+            child: Image.asset("lib/assets/title2.png"),
+          ),
+        ),
+      ],
+    );
+  }
+}

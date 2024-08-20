@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'Home.dart';
+import 'Battle.dart';
+import 'Collection.dart';
+import 'Shop.dart';
 
 class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key}) : super(key: key);
+  final Function(int) onItemSelected;
+  final int selectedIndex;
+  const Sidebar(
+      {Key? key, required this.onItemSelected, required this.selectedIndex})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +43,8 @@ class Sidebar extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () {},
+            selected: selectedIndex == 0,
+            onTap: () => onItemSelected(0),
           ),
           ListTile(
             title: Column(
@@ -49,7 +58,8 @@ class Sidebar extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () {},
+            selected: selectedIndex == 1,
+            onTap: () => onItemSelected(1),
           ),
           ListTile(
             title: Column(
@@ -64,7 +74,8 @@ class Sidebar extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () {},
+            selected: selectedIndex == 2,
+            onTap: () => onItemSelected(2),
           ),
           ListTile(
             title: Column(
@@ -78,13 +89,14 @@ class Sidebar extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () {},
+            selected: selectedIndex == 3,
+            onTap: () => onItemSelected(3),
           ),
           ListTile(
             title: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('lib/assets/down.png', width: 70, height: 70),
+                Image.asset('lib/assets/down-2.png', width: 70, height: 70),
                 const SizedBox(height: 8),
                 const Text(
                   'More',
