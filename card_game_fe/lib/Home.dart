@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Sidebar.dart';
+import 'dart:ui';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,10 +20,15 @@ class HomePage extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Center(child: Image.asset("lib/assets/title.png")),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                )
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    width: 700,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.1),
+                        ),
+                        child: Image.asset("lib/assets/title2.png")))
               ],
             ),
           ),
