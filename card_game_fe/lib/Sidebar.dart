@@ -14,7 +14,7 @@ class Sidebar extends StatelessWidget {
               end: Alignment.centerLeft,
               colors: [
                 Color.fromARGB(255, 102, 1, 149),
-                Color.fromARGB(255, 44, 19, 23)
+                Color.fromARGB(255, 44, 19, 23),
               ])),
       // color: const Color.fromARGB(255, 70, 52, 81),
       child: Column(
