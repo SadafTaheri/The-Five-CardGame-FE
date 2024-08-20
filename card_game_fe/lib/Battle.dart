@@ -8,17 +8,17 @@ class Battle extends StatelessWidget {
           child: Opacity(
               opacity: 0.9,
               child: Image.asset(
-                "lib/assets/2.jpeg",
+                "lib/assets/space.jpeg",
                 fit: BoxFit.cover,
               ))),
-      Positioned(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.1),
-          ),
-          child: Text("Game Info"),
-        ),
-      ),
+      // Positioned(
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: Colors.black.withOpacity(0.1),
+      //     ),
+      //     child: Text("Game Info"),
+      //   ),
+      // ),
     ]);
   }
 }

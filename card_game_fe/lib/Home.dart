@@ -3,6 +3,8 @@ import 'Sidebar.dart';
 import 'Battle.dart';
 import 'Collection.dart';
 import 'Shop.dart';
+import 'Instructions.dart';
+import 'Logout.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +21,8 @@ class _HomePageState extends State<HomePage> {
     Battle(),
     Collection(),
     Shop(),
+    Instructions(),
+    Logout()
 
     //
   ];

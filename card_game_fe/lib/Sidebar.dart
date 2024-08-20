@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
-import 'Battle.dart';
-import 'Collection.dart';
-import 'Shop.dart';
+// import 'Home.dart';
+// import 'Battle.dart';
+// import 'Collection.dart';
+// import 'Shop.dart';
+// import 'Instructions.dart';
+// import 'Logout.dart';
 
 class Sidebar extends StatelessWidget {
   final Function(int) onItemSelected;
@@ -96,15 +98,32 @@ class Sidebar extends StatelessWidget {
             title: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('lib/assets/down-2.png', width: 70, height: 70),
+                Image.asset('lib/assets/instructions.png',
+                    width: 70, height: 70),
                 const SizedBox(height: 8),
                 const Text(
-                  'More',
+                  'How to play',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 )
               ],
             ),
-            onTap: () {},
+            selected: selectedIndex == 4,
+            onTap: () => onItemSelected(4),
+          ),
+          ListTile(
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset('lib/assets/logout.png', width: 70, height: 70),
+                const SizedBox(height: 8),
+                const Text(
+                  'Log out',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                )
+              ],
+            ),
+            selected: selectedIndex == 5,
+            onTap: () => onItemSelected(5),
           ),
         ],
       ),
