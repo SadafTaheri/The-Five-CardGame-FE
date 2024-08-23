@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class Battle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Scaffold(
+        body: Stack(children: [
       Positioned.fill(
           child: Opacity(
               opacity: 0.9,
@@ -12,13 +13,23 @@ class Battle extends StatelessWidget {
                 fit: BoxFit.cover,
               ))),
       // Positioned(
-      //   child: Container(
-      //     decoration: BoxDecoration(
-      //       color: Colors.black.withOpacity(0.1),
-      //     ),
-      //     child: Text("Game Info"),
-      //   ),
-      // ),
-    ]);
+      //     top: 10,
+      //     left: 10,
+      //     child: StatefulBuilder(
+      //         builder: (BuildContext context, StateSetter setState) {
+      //       bool _isSwitched = false;
+      //       return Switch(
+      //           value: _isSwitched,
+      //           onChanged: (value) {
+      //             setState(() {
+      //               _isSwitched = value;
+      //             });
+      //           });
+      //     }))
+      Positioned(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        ElevatedButton(onPressed: null, child: Text("Easy Game"))
+      ]))
+    ]));
   }
 }

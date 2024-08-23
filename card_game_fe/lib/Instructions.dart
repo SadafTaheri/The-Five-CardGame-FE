@@ -29,6 +29,7 @@ class _InstructionsState extends State<Instructions> {
     return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(
+          opacity: 0.9,
             image: AssetImage("lib/assets/space.jpeg"), fit: BoxFit.cover),
       ),
       child: Center(
