@@ -29,8 +29,9 @@ class _InstructionsState extends State<Instructions> {
     return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(
-          opacity: 0.9,
-            image: AssetImage("lib/assets/space.jpeg"), fit: BoxFit.cover),
+            opacity: 0.9,
+            image: AssetImage("lib/assets/space.jpeg"),
+            fit: BoxFit.cover),
       ),
       child: Center(
         child: Padding(
@@ -137,20 +138,52 @@ class CollectCardInfo extends StatelessWidget {
 }
 
 class HowToPlay extends StatelessWidget {
-  const HowToPlay({
-    super.key,
-  });
+  const HowToPlay({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('How to play',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
         Text(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel faucibus neque. Suspendisse condimentum maximus auctor. Quisque porttitor eget purus vel auctor. Nunc vel vulputate lectus. Cras fermentum lacinia sapien quis sagittis. Ut ut tempus enim, id tempus purus. Duis luctus massa dui, ac pellentesque felis pellentesque quis.",
+          'How to Play',
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Objective:',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'The goal of the game is to outmaneuver your opponent by strategically playing cards, attacking, defending, and utilizing abilities. The game ends when a player cannot make any moves due to insufficient gold or no cards on the board.',
           style: TextStyle(
-              fontSize: 24, color: const Color.fromARGB(255, 249, 248, 248)),
+            fontSize: 18,
+            color: const Color.fromARGB(255, 249, 248, 248),
+          ),
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Game Setup:',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'Each player starts with a deck of up to 15 cards.\nGold is finite and is decided during the game setup, which is used to play cards.',
+          style: TextStyle(
+            fontSize: 18,
+            color: const Color.fromARGB(255, 249, 248, 248),
+          ),
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Turn Structure:',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'Each player has 3 actions per turn:\n- **Play Card:** Spend gold to play a card from your hand to the board.\n- **Attack with Card:** Use a card on the board to attack an opponent\'s card.\n- **Use an Ability:** Activate a special ability from a card on the board.',
+          style: TextStyle(
+            fontSize: 18,
+            color: const Color.fromARGB(255, 249, 248, 248),
+          ),
         ),
       ],
     );
