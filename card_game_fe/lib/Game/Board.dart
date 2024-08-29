@@ -51,7 +51,7 @@ class _BoardState extends State<Board> {
             80,
             "url_5"),
       ],
-      2000);
+      300);
   final Player playerTwo = new Player(
       'Player2',
       [
@@ -85,7 +85,7 @@ class _BoardState extends State<Board> {
             80,
             "url_4")
       ],
-      1500);
+      600);
   Widget? gameOver = null;
 
   bool isPlayerOne = true;
@@ -98,17 +98,20 @@ class _BoardState extends State<Board> {
             image: DecorationImage(
                 image: AssetImage('lib/assets/battlepageBackground.jpg'),
                 fit: BoxFit.fitHeight)),
-        child: gameOver is Widget ? gameOver :  Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [Credit(inactivePlayer.credit)],
-            ),
-            OpponentRow(inactivePlayer, setState, activePlayer),
-            PlayerRow(activePlayer, setState),
-            BottomUi(activePlayer, EndTurn, EndGame,inactivePlayer)
-          ],
-        ));
+        child: gameOver is Widget
+            ? gameOver
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [Credit(inactivePlayer.credit)],
+                  ),
+                  OpponentRow(
+                      inactivePlayer, setState, activePlayer, CheckEndGame),
+                  PlayerRow(activePlayer, setState),
+                  BottomUi(activePlayer, EndTurn, EndGame, inactivePlayer)
+                ],
+              ));
   }
 
   void EndTurn() {
@@ -117,7 +120,43 @@ class _BoardState extends State<Board> {
       isPlayerOne ? playerOne.actionsLeft = 3 : playerTwo.actionsLeft = 3;
     });
   }
-  void EndGame(player){
+
+  void CheckEndGame(Player inactivePlayer) {
+    bool noCardsInPlay = true;
+    for (Character? card in inactivePlayer.cardsInPlay) {
+      if (card is Character) noCardsInPlay = false;
+    }
+
+    if (noCardsInPlay) {
+      bool noCardsInHand = true;
+      for (Character? card in inactivePlayer.cardsInHand) {
+        if (card is Character) noCardsInHand = false;
+      }
+
+      if (noCardsInHand) {
+        EndGame(inactivePlayer.name);
+      } else {
+        int creditLeft = inactivePlayer.credit;
+        int lowestCostCard = inactivePlayer.cardsInHand[0].point_cost;
+
+        if (!noCardsInHand) {
+          for (Character card in inactivePlayer.cardsInHand) {
+            if (card.point_cost < lowestCostCard) {
+              lowestCostCard = card.point_cost;
+            }
+            ;
+          }
+        }
+
+        if (lowestCostCard > creditLeft) {
+          print("No play, no money");
+          EndGame(inactivePlayer.name);
+        }
+      }
+    }
+  }
+
+  void EndGame(player) {
     setState(() {
       gameOver = new GameOverScreen(player);
     });
@@ -147,11 +186,12 @@ class Credit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.brown,
+        color: Color.fromRGBO(111, 212, 255, 0.898),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Text(
         'Credit: ${creditLeft}',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
     );
@@ -168,7 +208,16 @@ class EmptyPosition extends StatelessWidget {
       height: 160,
       child: Container(
           child: DecoratedBox(
-              decoration: BoxDecoration(border: Border.all(width: 5)))),
+              decoration: BoxDecoration(
+                  boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(89, 245, 255, 135),
+              spreadRadius: 5,
+              blurRadius: 10,
+            ),
+          ],
+                  border: Border.all(
+                      width: 4, color: Color.fromRGBO(252, 255, 70, 0.5))))),
     );
   }
 }
@@ -177,7 +226,9 @@ class OpponentRow extends StatelessWidget {
   final Player activePlayer;
   final Player inactivePlayer;
   final Function setState;
-  const OpponentRow(this.inactivePlayer, this.setState, this.activePlayer);
+  final Function checkEndGame;
+  const OpponentRow(
+      this.inactivePlayer, this.setState, this.activePlayer, this.checkEndGame);
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +240,8 @@ class OpponentRow extends StatelessWidget {
             index: i,
             setState: setState,
             activePlayer: activePlayer,
-            defender: inactivePlayer.cardsInPlay[i]));
+            defender: inactivePlayer.cardsInPlay[i],
+            checkEndGame: checkEndGame));
       } else {
         cardList.add(EmptyPosition());
       }
@@ -202,19 +254,20 @@ class OpponentRow extends StatelessWidget {
 }
 
 class OpponentDragTarget extends StatelessWidget {
-  const OpponentDragTarget({
-    super.key,
-    required this.inactivePlayer,
-    required this.activePlayer,
-    required this.defender,
-    required this.setState,
-    required this.index,
-  });
+  const OpponentDragTarget(
+      {super.key,
+      required this.inactivePlayer,
+      required this.activePlayer,
+      required this.defender,
+      required this.setState,
+      required this.index,
+      required this.checkEndGame});
   final Player inactivePlayer;
   final int index;
   final Function setState;
   final Player activePlayer;
   final Character? defender;
+  final Function checkEndGame;
 
   @override
   Widget build(BuildContext context) {
@@ -229,11 +282,11 @@ class OpponentDragTarget extends StatelessWidget {
         setState(() {
           defender!.health -= attacker!.damage;
           activePlayer.actionsLeft--;
-          if(defender!.health<=0){
+          if (defender!.health <= 0) {
             inactivePlayer.cardsInPlay[index] = null;
+            checkEndGame(inactivePlayer);
           }
         });
-        print(value);
       }
     });
   }
@@ -293,9 +346,21 @@ class PlayerHand extends StatelessWidget {
         charactersInHand.map((Character characterCard) {
       return CardHandDrag(characterCard);
     }).toList();
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: draggableCards);
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(88, 24, 24, 24),
+              spreadRadius: 2,
+              blurRadius: 5,
+            )
+          ],
+          color: Color.fromRGBO(0, 0, 0, 0.4),
+          border: Border.all(color: Colors.white, width: 1)),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: draggableCards),
+    );
   }
 }
 
@@ -357,18 +422,28 @@ class InfoBar extends StatelessWidget {
   final Function EndGame;
   final Function EndTurn;
   final Player activePlayer;
-  const InfoBar(this.activePlayer, this.EndTurn, this.EndGame, this.inactivePlayer);
+  const InfoBar(
+      this.activePlayer, this.EndTurn, this.EndGame, this.inactivePlayer);
 
   @override
   Widget build(BuildContext context) {
     return Container(
         child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Credit(activePlayer.credit),
-        PlayerTurnInfo(activePlayer), // to do
-        SurrenderBtn(EndGame, inactivePlayer), // to do
-        EndTurnBtn(EndTurn) // to do
+        Row(children: [
+          Credit(activePlayer.credit),
+          SizedBox(width: 5),
+          PlayerTurnInfo(activePlayer),
+        ]),
+        Row(
+          children: [
+            SurrenderBtn(EndGame, inactivePlayer),
+            SizedBox(width: 5),
+            EndTurnBtn(EndTurn)
+          ],
+        )
       ],
     ));
   }
@@ -382,11 +457,12 @@ class PlayerTurnInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 14, 64, 110),
+        color: const Color.fromARGB(228, 243, 255, 74),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Text(
         '${activePlayer.name}: ${activePlayer.actionsLeft} actions left',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
     );
@@ -402,16 +478,20 @@ class SurrenderBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 165, 46, 144),
+        color: const Color.fromARGB(255, 216, 62, 62),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Container(
         height: 50,
         width: 200,
         child: TextButton(
-          onPressed: (){EndGame(inactivePlayer.name);},
+          onPressed: () {
+            EndGame(inactivePlayer.name);
+          },
           child: Text(
-            'Surrender!!:(',
-            style: TextStyle(fontSize: 18),
+            'Surrender',
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -428,7 +508,8 @@ class EndTurnBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 122, 193, 131),
+        color: const Color.fromARGB(228, 50, 104, 252),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Container(
         height: 50,
@@ -440,7 +521,8 @@ class EndTurnBtn extends StatelessWidget {
           },
           child: Text(
             'End Turn :(',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -454,7 +536,8 @@ class BottomUi extends StatelessWidget {
   final Function EndGame;
   final Function EndTurn;
   final Player activePlayer;
-  const BottomUi(this.activePlayer, this.EndTurn, this.EndGame, this.inactivePlayer); // remove {super.key}
+  const BottomUi(this.activePlayer, this.EndTurn, this.EndGame,
+      this.inactivePlayer); // remove {super.key}
 
   @override
   Widget build(BuildContext context) {
@@ -545,8 +628,12 @@ class GameOverScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('${winner} was the winner!!', style: TextStyle(fontSize: 42, fontWeight: FontWeight.w800, color: Colors.white)),
-          ElevatedButton(onPressed: (){}, child: Text('Home'))
+          Text('${winner} was the winner!!',
+              style: TextStyle(
+                  fontSize: 42,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white)),
+          ElevatedButton(onPressed: () {}, child: Text('Home'))
         ],
       ),
     );
