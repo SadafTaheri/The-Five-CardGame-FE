@@ -96,9 +96,9 @@ class _BattleState extends State<Battle> {
                       child: Text(
                         'Easy',
                         style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -122,9 +122,9 @@ class _BattleState extends State<Battle> {
                       child: Text(
                         'Medium',
                         style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -147,9 +147,9 @@ class _BattleState extends State<Battle> {
                       child: Text(
                         'Hard',
                         style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                     SizedBox(height: 40),
@@ -172,9 +172,9 @@ class _BattleState extends State<Battle> {
                       child: Text(
                         'Play',
                         style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ],
