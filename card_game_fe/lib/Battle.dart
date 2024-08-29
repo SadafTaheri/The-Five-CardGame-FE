@@ -40,6 +40,8 @@ class _BattleState extends State<Battle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
       appBar: AppBar(
         title: Text('Battle'),
         backgroundColor: Colors.purpleAccent,
@@ -48,10 +50,13 @@ class _BattleState extends State<Battle> {
         children: [
           Positioned.fill(
             child: Opacity(
+
               opacity: 0.9,
               child: Image.asset(
                 "lib/assets/space.jpeg",
                 fit: BoxFit.cover,
+
+
               ),
             ),
           ),
@@ -247,5 +252,6 @@ class DifficultyButton extends StatelessWidget {
         ),
       ),
     );
+
   }
 }
