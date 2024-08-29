@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:card_game_fe/Game/Game.dart';
 import 'package:flutter/material.dart';
 
 class Board extends StatefulWidget {
@@ -10,76 +11,84 @@ class Board extends StatefulWidget {
 }
 
 class _BoardState extends State<Board> {
-  final Player playerOne = new Player('player1',[
-    new Character(
-        "Superman",
-        50,
-        100,
-        new Ability("Critical Strike",
-            "A very, very big hit that does big damage", "attack", 75, 5),
-        100,
-        "url_1"),
-    new Character(
-        "Batman",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_2"),
-    new Character(
-        "Batman2",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_3"),
-    new Character(
-        "Batman3",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_4"),
-    new Character(
-        "Batman4",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_5"),
-  ], 2000);
-  final Player playerTwo = new Player('Player2',[
-    new Character(
-        "GreenLantern",
-        50,
-        100,
-        new Ability("Critical Strike",
-            "A very, very big hit that does big damage", "attack", 75, 5),
-        100,
-        "url_1"),
-    new Character(
-        "Deadpool",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_2"),
-    new Character(
-        "Wolverine",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_3"),
-    new Character(
-        "blue beetle",
-        40,
-        80,
-        new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
-        80,
-        "url_4")
-  ], 1500);
-  final bool isPlayerOne = true;
+  final Player playerOne = new Player(
+      'player1',
+      [
+        new Character(
+            "Superman",
+            50,
+            100,
+            new Ability("Critical Strike",
+                "A very, very big hit that does big damage", "attack", 75, 5),
+            100,
+            "url_1"),
+        new Character(
+            "Batman",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_2"),
+        new Character(
+            "Batman2",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_3"),
+        new Character(
+            "Batman3",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_4"),
+        new Character(
+            "Batman4",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_5"),
+      ],
+      2000);
+  final Player playerTwo = new Player(
+      'Player2',
+      [
+        new Character(
+            "GreenLantern",
+            50,
+            100,
+            new Ability("Critical Strike",
+                "A very, very big hit that does big damage", "attack", 75, 5),
+            100,
+            "url_1"),
+        new Character(
+            "Deadpool",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_2"),
+        new Character(
+            "Wolverine",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_3"),
+        new Character(
+            "blue beetle",
+            40,
+            80,
+            new Ability("Sonic Scream", "Ouch, my ears!", "attack", 60, 4),
+            80,
+            "url_4")
+      ],
+      1500);
+  Widget? gameOver = null;
+
+  bool isPlayerOne = true;
   @override
   Widget build(BuildContext context) {
     final Player activePlayer = isPlayerOne ? playerOne : playerTwo;
@@ -89,17 +98,29 @@ class _BoardState extends State<Board> {
             image: DecorationImage(
                 image: AssetImage('lib/assets/battlepageBackground.jpg'),
                 fit: BoxFit.fitHeight)),
-        child: Column(
+        child: gameOver is Widget ? gameOver :  Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [Credit(inactivePlayer.credit)],
             ),
-            OpponentRow(),
+            OpponentRow(inactivePlayer, setState, activePlayer),
             PlayerRow(activePlayer, setState),
-            BottomUi(activePlayer)
+            BottomUi(activePlayer, EndTurn, EndGame,inactivePlayer)
           ],
         ));
+  }
+
+  void EndTurn() {
+    setState(() {
+      isPlayerOne = !isPlayerOne;
+      isPlayerOne ? playerOne.actionsLeft = 3 : playerTwo.actionsLeft = 3;
+    });
+  }
+  void EndGame(player){
+    setState(() {
+      gameOver = new GameOverScreen(player);
+    });
   }
 }
 
@@ -153,20 +174,68 @@ class EmptyPosition extends StatelessWidget {
 }
 
 class OpponentRow extends StatelessWidget {
-  const OpponentRow({super.key});
+  final Player activePlayer;
+  final Player inactivePlayer;
+  final Function setState;
+  const OpponentRow(this.inactivePlayer, this.setState, this.activePlayer);
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> cardList = []; //
+    for (var i = 0; i <= 4; i++) {
+      if (inactivePlayer.cardsInPlay[i] is Character) {
+        cardList.add(OpponentDragTarget(
+            inactivePlayer: inactivePlayer,
+            index: i,
+            setState: setState,
+            activePlayer: activePlayer,
+            defender: inactivePlayer.cardsInPlay[i]));
+      } else {
+        cardList.add(EmptyPosition());
+      }
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        EmptyPosition(),
-        EmptyPosition(),
-        EmptyPosition(),
-        EmptyPosition(),
-        EmptyPosition(),
-      ],
+      children: cardList,
     );
+  }
+}
+
+class OpponentDragTarget extends StatelessWidget {
+  const OpponentDragTarget({
+    super.key,
+    required this.inactivePlayer,
+    required this.activePlayer,
+    required this.defender,
+    required this.setState,
+    required this.index,
+  });
+  final Player inactivePlayer;
+  final int index;
+  final Function setState;
+  final Player activePlayer;
+  final Character? defender;
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<DragData>(
+        builder: (context, candidateData, rejectedData) {
+      return BigCard(defender);
+    }, onWillAcceptWithDetails: (value) {
+      return value.data.cardtype == 'cardInPlay';
+    }, onAcceptWithDetails: (value) {
+      if (activePlayer.actionsLeft > 0) {
+        Character? attacker = value.data.character;
+        setState(() {
+          defender!.health -= attacker!.damage;
+          activePlayer.actionsLeft--;
+          if(defender!.health<=0){
+            inactivePlayer.cardsInPlay[index] = null;
+          }
+        });
+        print(value);
+      }
+    });
   }
 }
 
@@ -180,7 +249,8 @@ class PlayerRow extends StatelessWidget {
     List<Widget> cardList = []; //
     for (var i = 0; i <= 4; i++) {
       if (player.cardsInPlay[i] is Character) {
-        cardList.add(BigCard(player.cardsInPlay[i]));
+        cardList.add(DraggablePlayerCard(
+            player: player, character: player.cardsInPlay[i]));
       } else {
         cardList.add(EmptyPositionTarget(i, player, setState));
       }
@@ -188,6 +258,27 @@ class PlayerRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: cardList,
+    );
+  }
+}
+
+class DraggablePlayerCard extends StatelessWidget {
+  const DraggablePlayerCard({
+    super.key,
+    required this.player,
+    required this.character,
+  });
+
+  final Player player;
+  final Character? character;
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable(
+      data: new DragData('cardInPlay', character),
+      child: BigCard(character),
+      feedback: BigCard(character),
+      childWhenDragging: EmptyPosition(),
     );
   }
 }
@@ -235,7 +326,7 @@ class Player {
     null,
     null,
   ];
-  Player(this.name,this.cardsInHand, this.credit);
+  Player(this.name, this.cardsInHand, this.credit);
 }
 
 class Ability {
@@ -261,10 +352,12 @@ class Character {
       this.imageURL);
 }
 
-
 class InfoBar extends StatelessWidget {
+  final Player inactivePlayer;
+  final Function EndGame;
+  final Function EndTurn;
   final Player activePlayer;
-  const InfoBar(this.activePlayer);
+  const InfoBar(this.activePlayer, this.EndTurn, this.EndGame, this.inactivePlayer);
 
   @override
   Widget build(BuildContext context) {
@@ -274,8 +367,8 @@ class InfoBar extends StatelessWidget {
       children: [
         Credit(activePlayer.credit),
         PlayerTurnInfo(activePlayer), // to do
-        SurrenderBtn(), // to do
-        EndTurnBtn() // to do
+        SurrenderBtn(EndGame, inactivePlayer), // to do
+        EndTurnBtn(EndTurn) // to do
       ],
     ));
   }
@@ -301,7 +394,9 @@ class PlayerTurnInfo extends StatelessWidget {
 }
 
 class SurrenderBtn extends StatelessWidget {
-  const SurrenderBtn({super.key});
+  final Player inactivePlayer;
+  final Function EndGame;
+  const SurrenderBtn(this.EndGame, this.inactivePlayer);
 
   @override
   Widget build(BuildContext context) {
@@ -313,9 +408,7 @@ class SurrenderBtn extends StatelessWidget {
         height: 50,
         width: 200,
         child: TextButton(
-          onPressed: () {
-            print('surrender');
-          },
+          onPressed: (){EndGame(inactivePlayer.name);},
           child: Text(
             'Surrender!!:(',
             style: TextStyle(fontSize: 18),
@@ -328,7 +421,8 @@ class SurrenderBtn extends StatelessWidget {
 }
 
 class EndTurnBtn extends StatelessWidget {
-  const EndTurnBtn({super.key});
+  final Function EndTurn;
+  const EndTurnBtn(this.EndTurn);
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +435,7 @@ class EndTurnBtn extends StatelessWidget {
         width: 200,
         child: TextButton(
           onPressed: () {
+            EndTurn();
             print('End Turn :(');
           },
           child: Text(
@@ -355,13 +450,19 @@ class EndTurnBtn extends StatelessWidget {
 }
 
 class BottomUi extends StatelessWidget {
+  final Player inactivePlayer;
+  final Function EndGame;
+  final Function EndTurn;
   final Player activePlayer;
-  const BottomUi(this.activePlayer); // remove {super.key}
+  const BottomUi(this.activePlayer, this.EndTurn, this.EndGame, this.inactivePlayer); // remove {super.key}
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [InfoBar(activePlayer), PlayerHand(activePlayer.cardsInHand)],
+      children: [
+        InfoBar(activePlayer, EndTurn, EndGame, inactivePlayer),
+        PlayerHand(activePlayer.cardsInHand)
+      ],
     );
   }
 }
@@ -373,7 +474,7 @@ class CardHandDrag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Draggable(
-      data: character,
+      data: new DragData('cardInHand', character),
       child: SmallCard(),
       feedback: SmallCard(),
       childWhenDragging: Container(),
@@ -388,30 +489,27 @@ class EmptyPositionTarget extends StatelessWidget {
   const EmptyPositionTarget(this.index, this.player, this.setState);
   @override
   Widget build(BuildContext context) {
-    return DragTarget<Character>(
+    return DragTarget<DragData>(
       builder: (context, candidate, rejected) {
         return EmptyPosition();
       },
       onAcceptWithDetails: (value) {
         if (player.actionsLeft > 0) {
-          var character = value.data;
+          var character = value.data.character;
           setState(() {
             player.cardsInPlay[index] = character;
             player.cardsInHand = player.cardsInHand.where((character) {
               return player.cardsInPlay[index] != character;
             }).toList();
-            print(player.actionsLeft);
-            player.actionsLeft--;
-            print(player.actionsLeft);
-            player.credit -= character.point_cost;
-            print(player.credit);
-          });
 
-          print(player.cardsInPlay);
+            player.actionsLeft--;
+
+            player.credit -= character!.point_cost;
+          });
         }
       },
       onWillAcceptWithDetails: (value) {
-        return true;
+        return value.data.cardtype == 'cardInHand';
       },
     );
   }
@@ -427,6 +525,30 @@ class BigCard extends StatelessWidget {
       height: 100,
       width: 80,
       child: DecoratedBox(decoration: BoxDecoration(color: Colors.amber)),
+    );
+  }
+}
+
+class DragData {
+  String cardtype;
+  Character? character;
+  DragData(this.cardtype, this.character);
+}
+
+class GameOverScreen extends StatelessWidget {
+  final String winner;
+  const GameOverScreen(this.winner);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('${winner} was the winner!!', style: TextStyle(fontSize: 42, fontWeight: FontWeight.w800, color: Colors.white)),
+          ElevatedButton(onPressed: (){}, child: Text('Home'))
+        ],
+      ),
     );
   }
 }
