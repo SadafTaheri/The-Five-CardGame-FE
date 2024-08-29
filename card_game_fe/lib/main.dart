@@ -20,25 +20,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// import 'package:card_game_fe/Cards/BigCard.dart';
-// import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text('Card Preview'),
-//         ),
-//         body: Center(
-//           child: BigCard(), // Your custom card widget
-//         ),
-//       ),
-//     );
-//   }
-// }
