@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'Game/Game.dart';
 
 class Battle extends StatefulWidget {
   @override
@@ -40,8 +41,6 @@ class _BattleState extends State<Battle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-
       appBar: AppBar(
         title: Text('Battle'),
         backgroundColor: Colors.purpleAccent,
@@ -50,13 +49,10 @@ class _BattleState extends State<Battle> {
         children: [
           Positioned.fill(
             child: Opacity(
-
               opacity: 0.9,
               child: Image.asset(
                 "lib/assets/space.jpeg",
                 fit: BoxFit.cover,
-
-
               ),
             ),
           ),
@@ -81,47 +77,92 @@ class _BattleState extends State<Battle> {
                     ),
                     SizedBox(height: 40),
                     // Buttons for selecting game difficulty
-                    DifficultyButton(
-                      label: 'Easy Game',
-                      color: Colors.green,
-                      onHover: () {
+                    ElevatedButton(
+                      onPressed: () {
                         setState(() {
                           _description =
-                              "Easy Game: A relaxed pace with fewer enemies.";
-                          _cost = "Cost: 10 coins";
+                              "Easy Game: simple game with weaker opponents";
+                          _cost = "Cost: 100 coins";
                         });
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 41, 227, 84),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        'Easy',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 20),
-                    DifficultyButton(
-                      label: 'Medium Game',
-                      color: Colors.orange,
-                      onHover: () {
+                    ElevatedButton(
+                      onPressed: () {
                         setState(() {
                           _description =
-                              "Medium Game: Balanced difficulty with moderate challenges.";
-                          _cost = "Cost: 20 coins";
+                              "Medium Game:Balanced game with moderate opponents";
+                          _cost = "Cost: 300 coins";
                         });
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 227, 150, 41),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        'Medium',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 20),
-                    DifficultyButton(
-                      label: 'Hard Game',
-                      color: Colors.red,
-                      onHover: () {
+                    ElevatedButton(
+                      onPressed: () {
                         setState(() {
                           _description =
-                              "Hard Game: Intense difficulty with powerful enemies.";
-                          _cost = "Cost: 30 coins";
+                              "Hard game: challenging game with difficult opponents";
+                          _cost = "Cost: 1000 coins";
                         });
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 218, 36, 36),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        'Hard',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 40),
                     // Play button at the bottom
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Game()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purpleAccent,
+                        backgroundColor: const Color.fromARGB(255, 32, 53, 241),
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
@@ -252,6 +293,5 @@ class DifficultyButton extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
