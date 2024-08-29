@@ -186,11 +186,12 @@ class Credit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.brown,
+        color: Color.fromRGBO(111, 212, 255, 0.898),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Text(
         'Credit: ${creditLeft}',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
     );
@@ -207,7 +208,16 @@ class EmptyPosition extends StatelessWidget {
       height: 160,
       child: Container(
           child: DecoratedBox(
-              decoration: BoxDecoration(border: Border.all(width: 5)))),
+              decoration: BoxDecoration(
+                  boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(89, 245, 255, 135),
+              spreadRadius: 5,
+              blurRadius: 10,
+            ),
+          ],
+                  border: Border.all(
+                      width: 4, color: Color.fromRGBO(252, 255, 70, 0.5))))),
     );
   }
 }
@@ -407,12 +417,20 @@ class InfoBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Credit(activePlayer.credit),
-        PlayerTurnInfo(activePlayer), // to do
-        SurrenderBtn(EndGame, inactivePlayer), // to do
-        EndTurnBtn(EndTurn) // to do
+        Row(children: [
+          Credit(activePlayer.credit),
+          SizedBox(width: 5),
+          PlayerTurnInfo(activePlayer),
+        ]),
+        Row(
+          children: [
+            SurrenderBtn(EndGame, inactivePlayer),
+            SizedBox(width: 5),
+            EndTurnBtn(EndTurn)
+          ],
+        )
       ],
     ));
   }
@@ -426,11 +444,12 @@ class PlayerTurnInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 14, 64, 110),
+        color: const Color.fromARGB(228, 243, 255, 74),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Text(
         '${activePlayer.name}: ${activePlayer.actionsLeft} actions left',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
     );
@@ -446,7 +465,8 @@ class SurrenderBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 165, 46, 144),
+        color: const Color.fromARGB(255, 216, 62, 62),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Container(
         height: 50,
@@ -456,8 +476,9 @@ class SurrenderBtn extends StatelessWidget {
             EndGame(inactivePlayer.name);
           },
           child: Text(
-            'Surrender!!:(',
-            style: TextStyle(fontSize: 18),
+            'Surrender',
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -474,7 +495,8 @@ class EndTurnBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 122, 193, 131),
+        color: const Color.fromARGB(228, 50, 104, 252),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Container(
         height: 50,
@@ -486,7 +508,8 @@ class EndTurnBtn extends StatelessWidget {
           },
           child: Text(
             'End Turn :(',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
