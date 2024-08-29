@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
+import './CardClasses.dart';
 
-class BigCard extends StatelessWidget {
+class BigCardRender extends StatelessWidget {
   final String cardCost;
   final String image_url;
   final String characterName;
@@ -10,7 +10,7 @@ class BigCard extends StatelessWidget {
   final String health;
   final String damage;
 
-  BigCard({
+  BigCardRender({
     required this.cardCost,
     required this.image_url,
     required this.characterName,
@@ -43,7 +43,7 @@ class BigCard extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                cardCost,
+                cardCost.toString(),
                 style: const TextStyle(fontSize: 10, color: Colors.white),
               )
             ])),
@@ -55,7 +55,8 @@ class BigCard extends StatelessWidget {
           left: 6.1,
           width: 130.6,
           height: 85,
-          child: Image.asset(image_url, fit: BoxFit.cover),
+          child: Image.asset("lib/assets/characters/${image_url}",
+              fit: BoxFit.cover),
         ),
 
         Stack(
@@ -109,7 +110,7 @@ class BigCard extends StatelessWidget {
                     size: 13,
                   ),
                   Text(
-                    health,
+                    health.toString(),
                     style: const TextStyle(fontSize: 13, color: Colors.white),
                   )
                 ])),
@@ -122,7 +123,7 @@ class BigCard extends StatelessWidget {
                   children: [
                     Image.asset("lib/assets/whiteSword.png", width: 10),
                     Text(
-                      damage,
+                      damage.toString(),
                       style: const TextStyle(fontSize: 13, color: Colors.white),
                     ),
                   ],
