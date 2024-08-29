@@ -1,6 +1,7 @@
 import 'package:card_game_fe/Cards/BigCardRender.dart';
 import 'package:flutter/material.dart';
 import '../Cards/CardClasses.dart';
+import '../Home.dart';
 
 class Board extends StatefulWidget {
   const Board({super.key});
@@ -74,7 +75,7 @@ class _BoardState extends State<Board> {
             640,
             "peterGriffin.webp"),
       ],
-      300);
+      2000);
   final Player playerTwo = new Player(
       'Player Two',
       [
@@ -101,7 +102,7 @@ class _BoardState extends State<Board> {
                 60,
                 4),
             665,
-            "elsa.jpeg"),
+            "elsa.jpg"),
         new Character(
             "Simba",
             70,
@@ -137,9 +138,9 @@ class _BoardState extends State<Board> {
                 60,
                 4),
             905,
-            "darthVader.jpg")
+            "darthVader.jpeg")
       ],
-      600);
+      2000);
   Widget? gameOver = null;
 
   bool isPlayerOne = true;
@@ -215,21 +216,6 @@ class _BoardState extends State<Board> {
     });
   }
 }
-
-// const Map numb1 = {
-// 'name': "Ironman",
-// 'health': 90,
-// 'damage': 50,
-// 'point_cost':90,
-// 'imageURL': 'helowhw',
-// 'ability': {
-// 'name': "Rockets",
-// 'description': "A very, very big ability",
-// 'type': "attack",
-// 'strength': 70,
-// 'ability_cost': 4
-// }
-// };
 
 class Credit extends StatelessWidget {
   final int creditLeft;
@@ -519,7 +505,14 @@ class GameOverScreen extends StatelessWidget {
                   fontSize: 42,
                   fontWeight: FontWeight.w800,
                   color: Colors.white)),
-          ElevatedButton(onPressed: () {}, child: Text('Home'))
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+              child: Text('Home'))
         ],
       ),
     );
@@ -538,7 +531,8 @@ class EmptyPositionTarget extends StatelessWidget {
         return EmptyPosition();
       },
       onAcceptWithDetails: (value) {
-        if (player.actionsLeft > 0) {
+        if (player.actionsLeft > 0 &&
+            player.credit >= value.data.character!.point_cost) {
           var character = value.data.character;
           setState(() {
             player.cardsInPlay[index] = character;
