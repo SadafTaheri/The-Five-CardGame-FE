@@ -346,9 +346,21 @@ class PlayerHand extends StatelessWidget {
         charactersInHand.map((Character characterCard) {
       return CardHandDrag(characterCard);
     }).toList();
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: draggableCards);
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(88, 24, 24, 24),
+              spreadRadius: 2,
+              blurRadius: 5,
+            )
+          ],
+          color: Color.fromRGBO(0, 0, 0, 0.4),
+          border: Border.all(color: Colors.white, width: 1)),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: draggableCards),
+    );
   }
 }
 
@@ -418,6 +430,7 @@ class InfoBar extends StatelessWidget {
     return Container(
         child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(children: [
           Credit(activePlayer.credit),
